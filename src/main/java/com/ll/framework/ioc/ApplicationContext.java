@@ -13,6 +13,10 @@ public class ApplicationContext {
     public <T> T genBean(String beanName) {
         if(beans.containsKey(beanName)) {
             return (T) beans.get(beanName);
+        } else if (Objects.equals(beanName,"testPostRepository")) {
+            Object bean = new TestPostRepository();
+            beans.put(beanName, bean);
+            return (T) bean;
         }
         Object bean = new TestPostService(new  TestPostRepository());
         beans.put(beanName, bean);
