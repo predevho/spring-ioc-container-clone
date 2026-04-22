@@ -3,13 +3,19 @@ package com.ll.framework.ioc;
 import com.ll.domain.testPost.testPost.repository.TestPostRepository;
 import com.ll.domain.testPost.testPost.service.TestPostService;
 
-public class ApplicationContext {
-    public ApplicationContext() {
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 
-    }
+public class ApplicationContext {
+    private final Map<String, Object> beans = new HashMap<>();
 
     public <T> T genBean(String beanName) {
-        TestPostService testPostService = new TestPostService(new TestPostRepository());
-        return (T) testPostService;
+        if(beans.containsKey(beanName)) {
+            return (T) beans.get(beanName);
+        }
+        Object bean = new TestPostService(new  TestPostRepository());
+        beans.put(beanName, bean);
+        return (T) bean;
     }
 }
