@@ -11,15 +11,16 @@ public class ApplicationContext {
     private final Map<String, Object> beans = new HashMap<>();
 
     public <T> T genBean(String beanName) {
-        if(beans.containsKey(beanName)) {
+        if (beans.containsKey(beanName)) {
             return (T) beans.get(beanName);
-        } else if (Objects.equals(beanName,"testPostRepository")) {
-            Object bean = new TestPostRepository();
-            beans.put(beanName, bean);
-            return (T) bean;
         }
-        Object bean = new TestPostService(genBean("testPostRepository"));
+        Object bean = switch (beanName) {
+            case "testPostRepository" -> new TestPostRepository();
+            case "testPostService" -> new TestPostService(genBean("testPostRepository"));
+            default -> null;
+        };
         beans.put(beanName, bean);
         return (T) bean;
+
     }
 }
